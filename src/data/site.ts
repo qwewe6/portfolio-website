@@ -72,14 +72,14 @@ export const about = [
   'Outside of work you can find me in the foothills with my RC crawlers, bouldering at the gym, or at the roller hockey rink. The rest of the time, if I’m not hanging out with friends and family, I’m relaxing with an audiobook or a movie on.',
 ];
 
-// `id` is the anchor on the page (/#hobby-<id>); `short` is the label used in the Explore index.
-export type Hobby = { id: string; short: string; name: string; line: string; href?: string };
+// `id` becomes the list item's anchor: /#hobby-<id>
+export type Hobby = { id: string; name: string; line: string; href?: string };
 
 export const hobbies: Hobby[] = [
-  { id: 'youtube', short: 'YouTube', name: 'RC crawlers and the YouTube channel', line: 'My interest in cinematography, editing and RC cars in one place. Major inspiration for the RCxDrive app, as well as a fun creative outlet, with a great community to boot.', href: 'https://www.youtube.com/@RCxDco' },
-  { id: 'hockey', short: 'Roller hockey', name: 'Roller hockey', line: 'I played roller as a kid and recently picked it back up after a ten-year break (you never really stop playing). I play on two teams and it’s been a blast.' },
-  { id: 'climbing', short: 'Climbing', name: 'Climbing', line: 'Indoor bouldering. Trying to get over the V4 hump; outdoor sessions on the horizon.' },
-  { id: 'reading', short: 'Reading', name: 'Reading and audiobooks', line: 'A few favorites: Red Rising (Pierce Brown), The Kingkiller Chronicle (Patrick Rothfuss), Endurance (Alfred Lansing), and Project Hail Mary and The Martian (Andy Weir). I’d especially recommend Endurance if you’re into true accounts of bravery and resilience.' },
+  { id: 'youtube', name: 'RC crawlers and the YouTube channel', line: 'My interest in cinematography, editing and RC cars in one place. Major inspiration for the RCxDrive app, as well as a fun creative outlet, with a great community to boot.', href: 'https://www.youtube.com/@RCxDco' },
+  { id: 'hockey', name: 'Roller hockey', line: 'I played roller as a kid and recently picked it back up after a ten-year break (you never really stop playing). I play on two teams and it’s been a blast.' },
+  { id: 'climbing', name: 'Climbing', line: 'Indoor bouldering. Trying to get over the V4 hump; outdoor sessions on the horizon.' },
+  { id: 'reading', name: 'Reading and audiobooks', line: 'A few favorites: Red Rising (Pierce Brown), The Kingkiller Chronicle (Patrick Rothfuss), Endurance (Alfred Lansing), and Project Hail Mary and The Martian (Andy Weir). I’d especially recommend Endurance if you’re into true accounts of bravery and resilience.' },
 ];
 
 export type Img = { src: string; alt: string; caption?: string };
