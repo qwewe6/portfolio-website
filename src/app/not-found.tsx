@@ -1,19 +1,20 @@
 import Link from 'next/link';
-import SiteNav from '@/components/SiteNav';
+import Nav from '@/components/Nav';
+import Footer from '@/components/Footer';
 
 export default function NotFound() {
   return (
     <>
-      <div className="case-top">
-        <SiteNav tone="light" />
-      </div>
-      <main id="main" className="wrap notfound">
-        <h1>Off the line.</h1>
-        <p>There’s no page at this address. It may have moved when the site was rebuilt.</p>
-        <Link className="btn btn-primary" href="/">
-          Go to the home page
+      <Nav />
+      <main id="main" className="case">
+        <p className="eyebrow">404</p>
+        <h1>Nothing here.</h1>
+        <p className="intro">There’s no page at this address.</p>
+        <Link className="btn btn-fill" href="/">
+          Back to the home page
         </Link>
       </main>
+      <Footer />
     </>
   );
 }

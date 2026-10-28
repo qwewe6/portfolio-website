@@ -4,3 +4,6 @@ out
 next-env.d.ts
 *.tsbuildinfo
 .DS_Store
+
+# scratch folder for things to review before trashing
+delete/

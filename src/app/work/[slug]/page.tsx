@@ -1,102 +1,47 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import SiteNav from '@/components/SiteNav';
-import Squiggle from '@/components/Squiggle';
-import FlotGlyphs from '@/components/FlotGlyphs';
-import Contact from '@/components/Contact';
-import { projects, getProject, type Img } from '@/data/projects';
+import Nav from '@/components/Nav';
+import Footer from '@/components/Footer';
+import Trace from '@/components/Trace';
+import { projects, getProject } from '@/data/site';
 import { asset } from '@/lib/asset';
 
 export const dynamicParams = false;
 
+const pages = projects.filter((p) => !p.external);
+
 export function generateStaticParams() {
-  return projects.map((p) => ({ slug: p.slug }));
+  return pages.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const p = getProject(slug);
-  return p ? { title: p.name, description: p.summary } : {};
-}
-
-function Figure({ img }: { img: Img }) {
-  return (
-    <figure className={`fig ${img.tall ? 'fig-tall' : 'fig-wide'}`}>
-      <img src={asset(img.src)} alt={img.alt} loading="lazy" />
-      {img.caption && <figcaption>{img.caption}</figcaption>}
-    </figure>
-  );
+  return p ? { title: p.name, description: p.line } : {};
 }
 
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const p = getProject(slug);
-  if (!p) notFound();
-  const i = projects.findIndex((x) => x.slug === p.slug);
-  const next = projects[(i + 1) % projects.length];
+  if (!p || p.external) notFound();
+  const i = pages.findIndex((x) => x.slug === p.slug);
+  const next = pages[(i + 1) % pages.length];
 
   return (
     <>
-      <div className="case-top">
-        <SiteNav tone="light" />
-      </div>
+      <Nav />
       <main id="main" className="case">
-        <header className="wrap case-head">
-          <Link href="/#work" className="back">
-            All work
-          </Link>
-          <Squiggle color={p.color} />
-          <h1>{p.name}</h1>
-          <p className="case-tagline">{p.tagline}</p>
-          <p className="case-summary">{p.summary}</p>
+        <Link href="/#projects" className="back">
+          All projects
+        </Link>
+        <p className="eyebrow">{p.year}</p>
+        <h1>{p.name}</h1>
+        <p className="tagline">{p.line}</p>
+        <p className="intro">{p.summary}</p>
 
-          <dl className="case-meta">
-            <div>
-              <dt>My role</dt>
-              <dd>{p.role}</dd>
-            </div>
-            <div>
-              <dt>Status</dt>
-              <dd>
-                {p.status.includes(p.year) ? p.status : `${p.status}, ${p.year}`}
-              </dd>
-            </div>
-            <div>
-              <dt>Built with</dt>
-              <dd>{p.stack.join(', ')}</dd>
-            </div>
-          </dl>
-
-          {p.shows && (
-            <p className="case-shows">
-              <strong>What it shows</strong> {p.shows}
-            </p>
-          )}
-
-          {p.links.length > 0 && (
-            <p className="case-links">
-              {p.links.map((l) => (
-                <a key={l.href} href={l.href} className="btn btn-primary">
-                  {l.label}
-                </a>
-              ))}
-            </p>
-          )}
-        </header>
-
-        <div className="wrap case-hero">
-          {p.cover.src ? (
-            <figure className={`case-cover ${p.cover.tall ? 'tall' : ''} ${p.cover.contain ? 'contain' : ''}`}>
-              <img src={asset(p.cover.src)} alt={p.cover.alt} style={p.cover.bg ? { background: p.cover.bg } : undefined} />
-              {p.cover.caption && <figcaption>{p.cover.caption}</figcaption>}
-            </figure>
-          ) : (
-            <div className="case-cover glyph-cover">
-              <FlotGlyphs />
-            </div>
-          )}
-          <dl className={`case-facts c-${p.color}`}>
+        {p.facts && (
+          <dl className="facts">
             {p.facts.map((f) => (
               <div key={f.label}>
                 <dt>{f.figure}</dt>
@@ -104,54 +49,58 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
               </div>
             ))}
           </dl>
+        )}
+
+        <div className="case-body">
+          {p.body?.map((b) => (
+            <p key={b}>{b}</p>
+          ))}
+          {p.wins && (
+            <>
+              <h2 className="h2-small">{p.wins.heading}</h2>
+              <ul className="wins">
+                {p.wins.items.map((w) => (
+                  <li key={w}>{w}</li>
+                ))}
+              </ul>
+            </>
+          )}
+          {p.after?.map((b) => (
+            <p key={b}>{b}</p>
+          ))}
+          {p.tech && (
+            <p className="tech">
+              <strong>Built with</strong> {p.tech}
+            </p>
+          )}
+          {p.link && (
+            <a className="btn btn-text" href={p.link.href}>
+              {p.link.label} <Trace color="ink" dir="up" />
+            </a>
+          )}
         </div>
 
-        {p.sections.map((s) => (
-          <section className="case-section" key={s.heading}>
-            <div className="wrap prose-wrap">
-              <h2>{s.heading}</h2>
-              {s.body.map((b, k) => (
-                <p key={k}>{b}</p>
-              ))}
-              {s.quote && <blockquote className={`c-${p.color}`}>{s.quote}</blockquote>}
-              {s.steps && (
-                <ol className={`steps c-${p.color}`}>
-                  {s.steps.map((st) => (
-                    <li key={st.title}>
-                      <h3>{st.title}</h3>
-                      <p>{st.text}</p>
-                      {st.href && (
-                        <a className="step-link" href={st.href}>
-                          {st.linkLabel || 'Read more'}
-                        </a>
-                      )}
-                    </li>
-                  ))}
-                </ol>
-              )}
-            </div>
-            {s.images && (
-              <div className={`wrap figs figs-${s.images.length}`}>
-                {s.images.map((img) => (
-                  <Figure key={img.src} img={img} />
-                ))}
-              </div>
-            )}
-          </section>
-        ))}
-
-        <nav className="wrap" aria-label="Next project">
-          <div className="next">
-          <p>Next project</p>
-          <Link href={`/work/${next.slug}/`}>
-            <Squiggle color={next.color} />
-            <span className="next-name">{next.name}</span>
-            <span className="next-tag">{next.tagline}</span>
-          </Link>
+        {p.images && (
+          <div className="figs">
+            {p.images.map((img) => (
+              <figure key={img.src}>
+                <img src={asset(img.src)} alt={img.alt} loading="lazy" />
+                {img.caption && <figcaption>{img.caption}</figcaption>}
+              </figure>
+            ))}
           </div>
-        </nav>
+        )}
+
+        {next.slug !== p.slug && (
+          <p className="next">
+            <span className="muted">Next</span>{' '}
+            <Link href={`/work/${next.slug}/`}>
+              {next.name} <Trace color="violet" />
+            </Link>
+          </p>
+        )}
       </main>
-      <Contact />
+      <Footer />
     </>
   );
 }

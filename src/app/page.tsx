@@ -1,277 +1,195 @@
 import Link from 'next/link';
-import Terrain from '@/components/Terrain';
-import SiteNav from '@/components/SiteNav';
-import Squiggle from '@/components/Squiggle';
-import FlotGlyphs from '@/components/FlotGlyphs';
-import Chain from '@/components/Chain';
-import Contact from '@/components/Contact';
-import { profile, results, experience, education, skills, fit } from '@/data/profile';
-import { projects } from '@/data/projects';
-import { asset } from '@/lib/asset';
-import { frames, getCover } from '@/data/notebook';
+import Nav from '@/components/Nav';
+import Footer from '@/components/Footer';
+import Photo from '@/components/Photo';
+import Trace, { TraceRule } from '@/components/Trace';
+import { site, numbers, experience, education, projects, hobbies, about } from '@/data/site';
 
-const teaserIds = ['flot-overview', 'flot-cells', 'flot-frames', 'rcxd-sketches'];
+// The bird's-eye index at the bottom of the page: every place on the site, in three columns.
+const index: { heading: string; color: 'yellow' | 'cyan' | 'violet' | 'green'; items: { label: string; href: string; download?: boolean }[] }[] = [
+  {
+    heading: 'Professional',
+    color: 'cyan',
+    items: [
+      { label: 'Experience', href: '/#experience' },
+      { label: 'Education', href: '/#education' },
+      { label: 'Résumé (PDF)', href: site.resume, download: true },
+      { label: 'LinkedIn', href: site.links.linkedin },
+      { label: 'GitHub', href: site.links.github },
+    ],
+  },
+  {
+    heading: 'Projects',
+    color: 'violet',
+    items: projects.map((p) => ({ label: p.short ?? p.name, href: p.external ?? `/work/${p.slug}/` })),
+  },
+  {
+    heading: 'Learn',
+    color: 'green',
+    items: [
+      { label: 'About me', href: '/#about' },
+      { label: 'Hobbies', href: '/#hobbies' },
+    ],
+  },
+];
 
 export default function Home() {
   return (
     <>
-      <header className="hero">
-        <Terrain />
-        <SiteNav />
-        <div className="wrap hero-inner">
-          <h1 className="hero-name">{profile.name}</h1>
-          <p className="hero-statement">{profile.statement}</p>
-          <p className="hero-where">
-            {profile.looking}. {profile.location}, open to remote.
-          </p>
-          <div className="hero-actions">
-            <a className="btn btn-primary" href={`mailto:${profile.email}`}>
-              Email me
-            </a>
-            <Link className="btn btn-ghost" href="/#work">
-              See the work
-            </Link>
-            <a className="btn btn-ghost" href={asset(profile.resume)} download>
-              Résumé (PDF)
-            </a>
-          </div>
-        </div>
-        <p className="hero-caption wrap">
-          Each coloured line is a run traced over terrain, the way RCxDrive draws them.
-        </p>
-      </header>
-
+      <Nav />
       <main id="main">
-        <section className="section about" aria-labelledby="about-title">
-          <div className="wrap about-grid">
-            <div className="about-text">
-              <h2 id="about-title">Customers first, then the tools.</h2>
-              {profile.intro.map((p, i) => (
-                <p key={i}>{p}</p>
-              ))}
-            </div>
-            <div className="ledger-wrap">
-              <h3 className="ledger-title">On the record</h3>
-              <dl className="ledger">
-                {results.map((r) => (
-                  <div className="ledger-row" key={r.label}>
-                    <dt>{r.figure}</dt>
-                    <dd>
-                      {r.label}
-                      <span className="ledger-where">{r.where}</span>
-                    </dd>
-                  </div>
-                ))}
-              </dl>
+        <section className="hero">
+          <div className="hero-text">
+            <p className="eyebrow">{site.eyebrow}</p>
+            <h1>{site.name}</h1>
+            <p className="tagline">{site.tagline}</p>
+            <p className="intro">{site.intro}</p>
+            <p className="ask">{site.looking}</p>
+            <div className="actions">
+              <Link className="btn btn-fill" href="/#index">
+                Bird’s-eye view
+              </Link>
+              <Link className="btn btn-text" href="/#about">
+                More about me
+              </Link>
             </div>
           </div>
+          <Photo />
         </section>
 
-        <section id="fit" className="section fit" aria-labelledby="fit-title">
-          <div className="wrap">
-            <h2 id="fit-title" className="section-title">
-              Where I fit in education
-            </h2>
-            <p className="section-lede">
-              I want to work at a company that helps people learn, in a role that touches customers and data. Here is
-              what each kind of role can see in the work on this site.
-            </p>
-            <dl className="fit-grid">
-              {fit.map((f) => (
-                <div className="fit-item" key={f.role}>
-                  <dt>{f.role}</dt>
-                  <dd>
-                    <p>{f.proof}</p>
-                    {f.href && (
-                      <Link href={f.href} className="text-link">
-                        {f.linkLabel || 'Read more'}
+        <section className="numbers" aria-label="Results">
+          <dl>
+            {numbers.map((n) => (
+              <div key={n.label}>
+                <dt>{n.figure}</dt>
+                <dd>{n.label}</dd>
+              </div>
+            ))}
+          </dl>
+          <p className="muted small">Lowe’s pro sales 2022–2025; Angi 2018–2019.</p>
+        </section>
+
+
+        <section id="experience" className="section" aria-labelledby="experience-title">
+          <TraceRule color="cyan" />
+          <h2 id="experience-title">Experience</h2>
+          <ol className="list">
+            {experience.map((r) => (
+              <li key={r.title + r.years}>
+                <span className="years">{r.years}</span>
+                <div>
+                  <h3>
+                    {r.title} <span className="org">· {r.org}</span>
+                  </h3>
+                  <p>{r.line}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <section id="projects" className="section" aria-labelledby="projects-title">
+          <TraceRule color="violet" />
+          <h2 id="projects-title">Projects</h2>
+          <ol className="list">
+            {projects.map((p) => (
+              <li key={p.slug}>
+                <span className="years">{p.year}</span>
+                <div>
+                  <h3>
+                    {p.external ? (
+                      <a href={p.external}>
+                        {p.name} <Trace color="violet" dir="up" />
+                      </a>
+                    ) : (
+                      <Link href={`/work/${p.slug}/`}>
+                        {p.name} <Trace color="violet" />
                       </Link>
                     )}
-                  </dd>
+                  </h3>
+                  <p>{p.line}</p>
                 </div>
-              ))}
-            </dl>
-          </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+        <section id="education" className="section" aria-labelledby="education-title">
+          <TraceRule color="cyan" />
+          <h2 id="education-title">Education</h2>
+          <ol className="list">
+            {education.map((r) => (
+              <li key={r.title}>
+                <span className="years">{r.years}</span>
+                <div>
+                  <h3>
+                    {r.title} <span className="org">· {r.org}</span>
+                  </h3>
+                  <p>{r.line}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
         </section>
 
-        <section id="work" className="section work" aria-labelledby="work-title">
-          <div className="wrap">
-            <h2 id="work-title" className="section-title">
-              Things I’m building
-            </h2>
-            <p className="section-lede">
-              What I’ve built since the boot camp, each started because I wanted it to exist, and the boot camp
-              itself. Each has a write-up of how it works and what I learned.
-            </p>
-          </div>
-          <div className="wrap projects">
-            {projects.map((p, i) => (
-              <article className={`project ${i % 2 ? 'flip' : ''}`} key={p.slug}>
-                <Link href={`/work/${p.slug}/`} className="project-media" tabIndex={-1} aria-hidden="true">
-                  {p.cover.src ? (
-                    <img
-                      src={asset(p.cover.src)}
-                      alt=""
-                      loading="lazy"
-                      className={p.cover.contain ? 'contain' : p.cover.tall ? 'tall' : ''}
-                      style={p.cover.bg ? { background: p.cover.bg } : undefined}
-                    />
-                  ) : (
-                    <div className="project-glyphs">
-                      <FlotGlyphs />
-                    </div>
-                  )}
-                </Link>
-                <div className="project-text">
-                  <Squiggle color={p.color} />
+        <section id="about" className="section" aria-labelledby="about-title">
+          <TraceRule color="yellow" />
+          <h2 id="about-title">About</h2>
+          {about.map((p) => (
+            <p key={p}>{p}</p>
+          ))}
+        </section>
+
+        <section id="hobbies" className="section" aria-labelledby="hobbies-title">
+          <TraceRule color="green" />
+          <h2 id="hobbies-title">Hobbies</h2>
+          <ul className="list">
+            {hobbies.map((h) => (
+              <li key={h.id} id={`hobby-${h.id}`}>
+                <span className="years" aria-hidden="true" />
+                <div>
                   <h3>
-                    <Link href={`/work/${p.slug}/`}>{p.name}</Link>
+                    {h.href ? (
+                      <a href={h.href}>
+                        {h.name} <Trace color="green" dir="up" />
+                      </a>
+                    ) : (
+                      h.name
+                    )}
                   </h3>
-                  <p className="project-tagline">{p.tagline}</p>
-                  <p>{p.summary}</p>
-                  <p className="project-meta">
-                    <span>{p.status}</span>
-                    <span>{p.stack.slice(0, 4).join(', ')}</span>
-                  </p>
-                  <Link href={`/work/${p.slug}/`} className="text-link">
-                    Read about {p.name}
-                  </Link>
+                  <p>{h.line}</p>
                 </div>
-              </article>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section id="index" className="section explore" aria-labelledby="index-title">
+          <h2 id="index-title">Bird’s-eye view</h2>
+          <div className="explore-grid">
+            {index.map((g) => (
+              <div key={g.heading}>
+                <h3>{g.heading}</h3>
+                <ul>
+                  {g.items.map((it) => (
+                    <li key={it.label}>
+                      {it.href.startsWith('/') ? (
+                        <Link href={it.href} {...(it.download ? { download: site.resumeFilename } : {})}>
+                          <span>{it.label}</span> <Trace color={g.color} dir={it.download ? 'down' : 'right'} />
+                        </Link>
+                      ) : (
+                        <a href={it.href}>
+                          <span>{it.label}</span> <Trace color={g.color} dir="up" />
+                        </a>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             ))}
           </div>
         </section>
-
-        <section className="section nb-teaser" aria-labelledby="nb-teaser-title">
-          <div className="wrap">
-            <h2 id="nb-teaser-title" className="section-title">
-              On paper first
-            </h2>
-            <p className="section-lede">
-              Most of this started as pencil on loose paper. The notebook has the original pages, laid out in FLOT,
-              the visual language I’ve been drawing since 2020.
-            </p>
-            <div className="nb-teaser-grid">
-              {teaserIds.map((id) => {
-                const f = frames.find((x) => x.id === id)!;
-                const c = getCover(f);
-                return (
-                  <Link key={id} href={`/notebook/#${id}`} className="nb-teaser-item">
-                    <span className="nb-tab">{f.label}</span>
-                    <span className="nb-cover">
-                      <img src={asset(c.img)} alt={c.alt} loading="lazy" />
-                    </span>
-                    <span className="nb-meta">
-                      <span className="nb-title">{c.title}</span>
-                      {c.date && <span className="nb-date">{c.date}</span>}
-                    </span>
-                  </Link>
-                );
-              })}
-            </div>
-            <p className="nb-teaser-cta">
-              <Link href="/notebook/" className="text-link">
-                Open the notebook
-              </Link>
-            </p>
-          </div>
-        </section>
-
-        <section id="approach" className="section approach" aria-labelledby="approach-title">
-          <div className="wrap approach-grid">
-            <div>
-              <h2 id="approach-title" className="section-title">
-                Human first, human last.
-              </h2>
-              <Chain />
-            </div>
-            <div className="approach-text">
-              <p>
-                I use AI heavily, and every AI step in what I build has a person on both sides of it. Nothing a model
-                produces reaches a customer without someone looking at it first.
-              </p>
-              <p>
-                In Mr. Pruner, I look at every photo before the model does, and approve every report before the
-                customer’s copy exists. In RCxDrive, you draw a box around your truck before the tracker starts, and
-                the tracker asks for help when it isn’t sure.
-              </p>
-              <p>
-                The rest is habits from sales and operations. Every project keeps a written plan, a log of decisions
-                and why they were made, and a changelog. When I don’t know something, I research it before I build
-                it: RCxDrive started as a teardown of Strava, Mr. Pruner as a look at why home service customers
-                don’t come back.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <section id="experience" className="section experience" aria-labelledby="experience-title">
-          <div className="wrap">
-            <h2 id="experience-title" className="section-title">
-              Experience
-            </h2>
-            <ol className="timeline">
-              {experience.map((r) => (
-                <li key={r.title + r.dates} className="role">
-                  <p className="role-dates">{r.dates}</p>
-                  <div className="role-body">
-                    <h3>{r.title}</h3>
-                    <p className="role-org">
-                      {r.org}, {r.place}
-                    </p>
-                    <p>{r.summary}</p>
-                    <ul>
-                      {r.highlights.map((h) => (
-                        <li key={h}>{h}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </li>
-              ))}
-            </ol>
-
-            <div className="edu-grid">
-              <div>
-                <h3 className="sub-title">Education</h3>
-                {education.map((e) => (
-                  <div className="edu" key={e.school}>
-                    <h4>{e.school}</h4>
-                    <p className="edu-detail">{e.detail}</p>
-                    <p className="edu-dates">{e.dates}</p>
-                    <p>{e.note}</p>
-                    {e.school === 'University of Denver' && (
-                      <Link href="/work/data-analytics-boot-camp/" className="text-link">
-                        What the boot camp covered
-                      </Link>
-                    )}
-                  </div>
-                ))}
-                <figure className="cert">
-                  <img
-                    src={asset('/img/about/du-certificate.jpg')}
-                    alt="University of Denver certificate: Maxwell Becker has successfully completed the Data Analytics Boot Camp, June 9, 2025, 494 hours earned"
-                    loading="lazy"
-                  />
-                </figure>
-              </div>
-              <div>
-                <h3 className="sub-title">Skills</h3>
-                {Object.entries(skills).map(([group, items]) => (
-                  <div className="skill-group" key={group}>
-                    <h4>{group}</h4>
-                    <ul className="tags">
-                      {items.map((s) => (
-                        <li key={s}>{s}</li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
       </main>
-      <Contact />
+      <Footer />
     </>
   );
 }
