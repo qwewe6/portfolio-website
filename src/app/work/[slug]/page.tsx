@@ -75,7 +75,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           )}
           {p.link && (
             <a className="btn btn-text" href={p.link.href}>
-              {p.link.label} <Trace color="ink" dir="up" />
+              {p.link.label} <Trace color="ink" kind="external" />
             </a>
           )}
         </div>

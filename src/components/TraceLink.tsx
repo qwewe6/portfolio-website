@@ -16,7 +16,7 @@ export default function TraceLink({ href, color, download, children }: Props) {
   if (download) {
     return (
       <a href={asset(href)} download={download}>
-        {children} <Trace color={color} dir="down" />
+        {children} <Trace color={color} kind="download" />
       </a>
     );
   }
@@ -29,7 +29,7 @@ export default function TraceLink({ href, color, download, children }: Props) {
   }
   return (
     <a href={href}>
-      {children} <Trace color={color} dir="up" />
+      {children} <Trace color={color} kind="external" />
     </a>
   );
 }
