@@ -201,8 +201,7 @@ h3 {
   background: #1f4535;
   border-color: #1f4535;
 }
-.btn-fill .trace path,
-.btn-fill .trace circle {
+.btn-fill .trace path {
   stroke: var(--brass-ink);
 }
 .btn-fill .trace circle {
@@ -306,11 +305,6 @@ h3 {
 }
 .h2-small {
   margin-top: 40px;
-}
-.h3-sub {
-  font-size: 1.1rem;
-  color: var(--muted);
-  margin: 28px 0 4px;
 }
 
 .list {
