@@ -61,7 +61,7 @@ export const experience: Role[] = [
   },
 ];
 
-export const education = [
+export const education: Role[] = [
   { years: '2025', title: 'Data Analytics Boot Camp', org: 'University of Denver', line: 'Python, SQL, Tableau, machine learning. 494 hours, grade A.' },
   { years: '2016–', title: 'B.S. Applied Mathematics, in progress', org: 'Colorado School of Mines / MSU Denver', line: 'Part time, while working.' },
 ];

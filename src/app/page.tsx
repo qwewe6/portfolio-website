@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import Photo from '@/components/Photo';
+import RoleList from '@/components/RoleList';
 import Trace, { TraceRule } from '@/components/Trace';
 import { site, numbers, experience, education, projects, hobbies, about } from '@/data/site';
 
@@ -69,23 +70,10 @@ export default function Home() {
           <p className="muted small">Lowe’s pro sales 2022–2025; Angi 2018–2019.</p>
         </section>
 
-
         <section id="experience" className="section" aria-labelledby="experience-title">
           <TraceRule color="cyan" />
           <h2 id="experience-title">Experience</h2>
-          <ol className="list">
-            {experience.map((r) => (
-              <li key={r.title + r.years}>
-                <span className="years">{r.years}</span>
-                <div>
-                  <h3>
-                    {r.title} <span className="org">· {r.org}</span>
-                  </h3>
-                  <p>{r.line}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
+          <RoleList roles={experience} />
         </section>
 
         <section id="projects" className="section" aria-labelledby="projects-title">
@@ -116,19 +104,7 @@ export default function Home() {
         <section id="education" className="section" aria-labelledby="education-title">
           <TraceRule color="cyan" />
           <h2 id="education-title">Education</h2>
-          <ol className="list">
-            {education.map((r) => (
-              <li key={r.title}>
-                <span className="years">{r.years}</span>
-                <div>
-                  <h3>
-                    {r.title} <span className="org">· {r.org}</span>
-                  </h3>
-                  <p>{r.line}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
+          <RoleList roles={education} />
         </section>
 
         <section id="about" className="section" aria-labelledby="about-title">
