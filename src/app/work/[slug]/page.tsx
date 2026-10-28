@@ -5,7 +5,7 @@ import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import Trace from '@/components/Trace';
 import { projects } from '@/data/site';
-import { asset } from '@/lib/asset';
+import { withBasePath } from '@/lib/withBasePath';
 
 export const dynamicParams = false;
 
@@ -84,7 +84,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           <div className="figs">
             {p.images.map((img) => (
               <figure key={img.src}>
-                <img src={asset(img.src)} alt={img.alt} loading="lazy" />
+                <img src={withBasePath(img.src)} alt={img.alt} loading="lazy" />
                 {img.caption && <figcaption>{img.caption}</figcaption>}
               </figure>
             ))}

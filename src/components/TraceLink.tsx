@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Trace, { type TraceColor } from './Trace';
-import { asset } from '@/lib/asset';
+import { withBasePath } from '@/lib/withBasePath';
 
 type Props = {
   href: string;
@@ -15,7 +15,7 @@ type Props = {
 export default function TraceLink({ href, color, download, children }: Props) {
   if (download) {
     return (
-      <a href={asset(href)} download={download}>
+      <a href={withBasePath(href)} download={download}>
         {children} <Trace color={color} kind="download" />
       </a>
     );

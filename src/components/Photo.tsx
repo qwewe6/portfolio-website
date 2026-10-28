@@ -1,5 +1,5 @@
 import { site } from '@/data/site';
-import { asset } from '@/lib/asset';
+import { withBasePath } from '@/lib/withBasePath';
 
 // The hero portrait, framed by corner marks. Shows a placeholder until site.photo is set.
 export default function Photo() {
@@ -10,7 +10,7 @@ export default function Photo() {
       <span className="corner bl" />
       <span className="corner br" />
       {site.photo ? (
-        <img src={asset(site.photo)} alt={`${site.name}, portrait`} width={320} height={320} />
+        <img src={withBasePath(site.photo)} alt={`${site.name}, portrait`} width={320} height={320} />
       ) : (
         <div className="photo-placeholder">
           <span className="photo-initials">MB</span>
