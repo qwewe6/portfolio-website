@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import Trace from '@/components/Trace';
-import { projects, getProject } from '@/data/site';
+import { projects } from '@/data/site';
 import { asset } from '@/lib/asset';
 
 export const dynamicParams = false;
@@ -17,15 +17,15 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const p = getProject(slug);
+  const p = pages.find((x) => x.slug === slug);
   return p ? { title: p.name, description: p.line } : {};
 }
 
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const p = getProject(slug);
-  if (!p || p.external) notFound();
-  const i = pages.findIndex((x) => x.slug === p.slug);
+  const i = pages.findIndex((x) => x.slug === slug);
+  if (i === -1) notFound();
+  const p = pages[i];
   const next = pages[(i + 1) % pages.length];
 
   return (

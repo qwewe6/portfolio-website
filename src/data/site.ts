@@ -192,5 +192,3 @@ export const projects: Project[] = [
     external: 'https://qwewe6.github.io/rockwood-displays/',
   },
 ];
-
-export const getProject = (slug: string) => projects.find((p) => p.slug === slug);
