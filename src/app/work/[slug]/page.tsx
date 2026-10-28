@@ -9,24 +9,24 @@ import { asset } from '@/lib/asset';
 
 export const dynamicParams = false;
 
-const pages = projects.filter((p) => !p.external);
+const internalProjects = projects.filter((p) => !p.external);
 
 export function generateStaticParams() {
-  return pages.map((p) => ({ slug: p.slug }));
+  return internalProjects.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const p = pages.find((x) => x.slug === slug);
+  const p = internalProjects.find((x) => x.slug === slug);
   return p ? { title: p.name, description: p.line } : {};
 }
 
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const i = pages.findIndex((x) => x.slug === slug);
+  const i = internalProjects.findIndex((x) => x.slug === slug);
   if (i === -1) notFound();
-  const p = pages[i];
-  const next = pages[(i + 1) % pages.length];
+  const p = internalProjects[i];
+  const next = internalProjects[(i + 1) % internalProjects.length];
 
   return (
     <>
@@ -52,8 +52,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         )}
 
         <div className="case-body">
-          {p.story?.map((b) => (
-            <p key={b}>{b}</p>
+          {p.story?.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
           ))}
           {p.bullets && (
             <>
@@ -65,8 +65,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
               </ul>
             </>
           )}
-          {p.closing?.map((b) => (
-            <p key={b}>{b}</p>
+          {p.closing?.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
           ))}
           {p.tech && (
             <p className="tech">

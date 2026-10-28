@@ -3,12 +3,12 @@ import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import Photo from '@/components/Photo';
 import RoleList from '@/components/RoleList';
-import { TraceRule } from '@/components/Trace';
+import { TraceRule, type TraceColor } from '@/components/Trace';
 import TraceLink from '@/components/TraceLink';
 import { site, stats, experience, education, projects, hobbies, about } from '@/data/site';
 
 // The bird's-eye index at the bottom of the page: every place on the site, in three columns.
-const index: { heading: string; color: 'yellow' | 'cyan' | 'violet' | 'green'; items: { label: string; href: string; download?: string }[] }[] = [
+const birdsEyeGroups: { heading: string; color: TraceColor; items: { label: string; href: string; download?: string }[] }[] = [
   {
     heading: 'Professional',
     color: 'cyan',
@@ -23,7 +23,7 @@ const index: { heading: string; color: 'yellow' | 'cyan' | 'violet' | 'green'; i
   {
     heading: 'Projects',
     color: 'violet',
-    items: projects.map((p) => ({ label: p.indexLabel ?? p.name, href: p.external ?? `/work/${p.slug}/` })),
+    items: projects.map((project) => ({ label: project.indexLabel ?? project.name, href: project.external ?? `/work/${project.slug}/` })),
   },
   {
     heading: 'Learn',
@@ -81,16 +81,16 @@ export default function Home() {
           <TraceRule color="violet" />
           <h2 id="projects-title">Projects</h2>
           <ol className="list">
-            {projects.map((p) => (
-              <li key={p.slug}>
-                <span className="years">{p.year}</span>
+            {projects.map((project) => (
+              <li key={project.slug}>
+                <span className="years">{project.year}</span>
                 <div>
                   <h3>
-                    <TraceLink href={p.external ?? `/work/${p.slug}/`} color="violet">
-                      {p.name}
+                    <TraceLink href={project.external ?? `/work/${project.slug}/`} color="violet">
+                      {project.name}
                     </TraceLink>
                   </h3>
-                  <p>{p.line}</p>
+                  <p>{project.line}</p>
                 </div>
               </li>
             ))}
@@ -105,8 +105,8 @@ export default function Home() {
         <section id="about" className="section" aria-labelledby="about-title">
           <TraceRule color="yellow" />
           <h2 id="about-title">About</h2>
-          {about.map((p) => (
-            <p key={p}>{p}</p>
+          {about.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
           ))}
         </section>
 
@@ -137,14 +137,14 @@ export default function Home() {
         <section id="index" className="section explore" aria-labelledby="index-title">
           <h2 id="index-title">Bird’s-eye view</h2>
           <div className="explore-grid">
-            {index.map((g) => (
-              <div key={g.heading}>
-                <h3>{g.heading}</h3>
+            {birdsEyeGroups.map((group) => (
+              <div key={group.heading}>
+                <h3>{group.heading}</h3>
                 <ul>
-                  {g.items.map((it) => (
-                    <li key={it.label}>
-                      <TraceLink href={it.href} color={g.color} download={it.download}>
-                        <span>{it.label}</span>
+                  {group.items.map((item) => (
+                    <li key={item.label}>
+                      <TraceLink href={item.href} color={group.color} download={item.download}>
+                        <span>{item.label}</span>
                       </TraceLink>
                     </li>
                   ))}
