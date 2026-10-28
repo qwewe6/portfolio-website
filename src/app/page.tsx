@@ -5,7 +5,7 @@ import Photo from '@/components/Photo';
 import RoleList from '@/components/RoleList';
 import { TraceRule } from '@/components/Trace';
 import TraceLink from '@/components/TraceLink';
-import { site, numbers, experience, education, projects, hobbies, about } from '@/data/site';
+import { site, stats, experience, education, projects, hobbies, about } from '@/data/site';
 
 // The bird's-eye index at the bottom of the page: every place on the site, in three columns.
 const index: { heading: string; color: 'yellow' | 'cyan' | 'violet' | 'green'; items: { label: string; href: string; download?: string }[] }[] = [
@@ -23,7 +23,7 @@ const index: { heading: string; color: 'yellow' | 'cyan' | 'violet' | 'green'; i
   {
     heading: 'Projects',
     color: 'violet',
-    items: projects.map((p) => ({ label: p.short ?? p.name, href: p.external ?? `/work/${p.slug}/` })),
+    items: projects.map((p) => ({ label: p.indexLabel ?? p.name, href: p.external ?? `/work/${p.slug}/` })),
   },
   {
     heading: 'Learn',
@@ -46,7 +46,7 @@ export default function Home() {
             <h1>{site.name}</h1>
             <p className="tagline">{site.tagline}</p>
             <p className="intro">{site.intro}</p>
-            <p className="ask">{site.looking}</p>
+            <p className="ask">{site.lookingFor}</p>
             <div className="actions">
               <Link className="btn btn-fill" href="/#index">
                 Bird’s-eye view
@@ -61,7 +61,7 @@ export default function Home() {
 
         <section className="numbers" aria-label="Results">
           <dl>
-            {numbers.map((n) => (
+            {stats.map((n) => (
               <div key={n.label}>
                 <dt>{n.figure}</dt>
                 <dd>{n.label}</dd>

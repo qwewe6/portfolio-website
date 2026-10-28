@@ -17,10 +17,10 @@ Every word and number on the site is in **one file**: `src/data/site.ts`.
 | In `site.ts` | What it controls |
 | --- | --- |
 | `site` | Name, eyebrow line, tagline, intro, email, résumé path, links, photo |
-| `numbers` | The figures under the hero |
+| `stats` | The figures under the hero |
 | `experience`, `education` | The Experience section, one line per role |
 | `hobbies` | The Hobbies section |
-| `projects` | The Projects list. Entries with `external` link out; the rest get a page at `/work/<slug>/` with `summary`, `facts`, `body`, `wins`, `after`, `tech`, `images`, `link` |
+| `projects` | The Projects list. Entries with `external` link out; the rest get a page at `/work/<slug>/` with `summary`, `stats`, `story`, `bullets`, `closing`, `tech`, `images`, `link` |
 
 Other files:
 

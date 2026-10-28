@@ -40,9 +40,9 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         <p className="tagline">{p.line}</p>
         <p className="intro">{p.summary}</p>
 
-        {p.facts && (
+        {p.stats && (
           <dl className="facts">
-            {p.facts.map((f) => (
+            {p.stats.map((f) => (
               <div key={f.label}>
                 <dt>{f.figure}</dt>
                 <dd>{f.label}</dd>
@@ -52,20 +52,20 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         )}
 
         <div className="case-body">
-          {p.body?.map((b) => (
+          {p.story?.map((b) => (
             <p key={b}>{b}</p>
           ))}
-          {p.wins && (
+          {p.bullets && (
             <>
-              <h2 className="h2-small">{p.wins.heading}</h2>
+              <h2 className="h2-small">{p.bullets.heading}</h2>
               <ul className="wins">
-                {p.wins.items.map((w) => (
+                {p.bullets.items.map((w) => (
                   <li key={w}>{w}</li>
                 ))}
               </ul>
             </>
           )}
-          {p.after?.map((b) => (
+          {p.closing?.map((b) => (
             <p key={b}>{b}</p>
           ))}
           {p.tech && (

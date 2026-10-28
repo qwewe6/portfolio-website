@@ -10,7 +10,7 @@ export default function Footer() {
           <a className="footer-email" href={`mailto:${site.email}?subject=Hello%20Max`}>
             {site.email}
           </a>
-          <p className="muted">{site.looking}</p>
+          <p className="muted">{site.lookingFor}</p>
           <p className="muted">Open to on-site, hybrid or remote.</p>
         </div>
         <ul className="footer-links">
