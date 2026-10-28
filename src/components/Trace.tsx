@@ -2,13 +2,20 @@
 // `dir` is 'right' for internal links, 'up' for links that leave the site, 'down' for downloads.
 export type TraceColor = 'yellow' | 'cyan' | 'violet' | 'green' | 'ink';
 
-export default function Trace({ color = 'ink', dir = 'right' }: { color?: TraceColor; dir?: 'right' | 'up' | 'down' }) {
-  const d = dir === 'up' ? 'M3 17 L15 5' : dir === 'down' ? 'M11 3 L11 17' : 'M3 11 L17 11';
-  const end = dir === 'up' ? { cx: 15, cy: 5 } : dir === 'down' ? { cx: 11, cy: 17 } : { cx: 17, cy: 11 };
+type Dir = 'right' | 'up' | 'down';
+
+const GEOMETRY: Record<Dir, { d: string; cx: number; cy: number }> = {
+  right: { d: 'M3 11 L17 11', cx: 17, cy: 11 },
+  up: { d: 'M3 17 L15 5', cx: 15, cy: 5 },
+  down: { d: 'M11 3 L11 17', cx: 11, cy: 17 },
+};
+
+export default function Trace({ color = 'ink', dir = 'right' }: { color?: TraceColor; dir?: Dir }) {
+  const { d, cx, cy } = GEOMETRY[dir];
   return (
     <svg className={`trace t-${color}`} width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" focusable="false">
       <path d={d} />
-      <circle cx={end.cx} cy={end.cy} r="3.2" />
+      <circle cx={cx} cy={cy} r="3.2" />
     </svg>
   );
 }
