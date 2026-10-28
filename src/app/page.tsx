@@ -3,18 +3,19 @@ import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import Photo from '@/components/Photo';
 import RoleList from '@/components/RoleList';
-import Trace, { TraceRule } from '@/components/Trace';
+import { TraceRule } from '@/components/Trace';
+import TraceLink from '@/components/TraceLink';
 import { site, numbers, experience, education, projects, hobbies, about } from '@/data/site';
 
 // The bird's-eye index at the bottom of the page: every place on the site, in three columns.
-const index: { heading: string; color: 'yellow' | 'cyan' | 'violet' | 'green'; items: { label: string; href: string; download?: boolean }[] }[] = [
+const index: { heading: string; color: 'yellow' | 'cyan' | 'violet' | 'green'; items: { label: string; href: string; download?: string }[] }[] = [
   {
     heading: 'Professional',
     color: 'cyan',
     items: [
       { label: 'Experience', href: '/#experience' },
       { label: 'Education', href: '/#education' },
-      { label: 'Résumé (PDF)', href: site.resume, download: true },
+      { label: 'Résumé (PDF)', href: site.resume, download: site.resumeFilename },
       { label: 'LinkedIn', href: site.links.linkedin },
       { label: 'GitHub', href: site.links.github },
     ],
@@ -85,15 +86,9 @@ export default function Home() {
                 <span className="years">{p.year}</span>
                 <div>
                   <h3>
-                    {p.external ? (
-                      <a href={p.external}>
-                        {p.name} <Trace color="violet" dir="up" />
-                      </a>
-                    ) : (
-                      <Link href={`/work/${p.slug}/`}>
-                        {p.name} <Trace color="violet" />
-                      </Link>
-                    )}
+                    <TraceLink href={p.external ?? `/work/${p.slug}/`} color="violet">
+                      {p.name}
+                    </TraceLink>
                   </h3>
                   <p>{p.line}</p>
                 </div>
@@ -125,9 +120,9 @@ export default function Home() {
                 <div>
                   <h3>
                     {h.href ? (
-                      <a href={h.href}>
-                        {h.name} <Trace color="green" dir="up" />
-                      </a>
+                      <TraceLink href={h.href} color="green">
+                        {h.name}
+                      </TraceLink>
                     ) : (
                       h.name
                     )}
@@ -148,15 +143,9 @@ export default function Home() {
                 <ul>
                   {g.items.map((it) => (
                     <li key={it.label}>
-                      {it.href.startsWith('/') ? (
-                        <Link href={it.href} {...(it.download ? { download: site.resumeFilename } : {})}>
-                          <span>{it.label}</span> <Trace color={g.color} dir={it.download ? 'down' : 'right'} />
-                        </Link>
-                      ) : (
-                        <a href={it.href}>
-                          <span>{it.label}</span> <Trace color={g.color} dir="up" />
-                        </a>
-                      )}
+                      <TraceLink href={it.href} color={g.color} download={it.download}>
+                        <span>{it.label}</span>
+                      </TraceLink>
                     </li>
                   ))}
                 </ul>
