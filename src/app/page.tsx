@@ -2,18 +2,20 @@ import Link from 'next/link';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import Photo from '@/components/Photo';
-import Trace, { TraceRule } from '@/components/Trace';
-import { site, numbers, experience, education, projects, hobbies, about } from '@/data/site';
+import RoleList from '@/components/RoleList';
+import { TraceRule, type TraceColor } from '@/components/Trace';
+import TraceLink from '@/components/TraceLink';
+import { site, stats, statsNote, experience, education, projects, hobbies, about } from '@/data/site';
 
 // The bird's-eye index at the bottom of the page: every place on the site, in three columns.
-const index: { heading: string; color: 'yellow' | 'cyan' | 'violet' | 'green'; items: { label: string; href: string; download?: boolean }[] }[] = [
+const birdsEyeGroups: { heading: string; color: TraceColor; items: { label: string; href: string; download?: string }[] }[] = [
   {
     heading: 'Professional',
     color: 'cyan',
     items: [
       { label: 'Experience', href: '/#experience' },
       { label: 'Education', href: '/#education' },
-      { label: 'Résumé (PDF)', href: site.resume, download: true },
+      { label: 'Résumé (PDF)', href: site.resume, download: site.resumeFilename },
       { label: 'LinkedIn', href: site.links.linkedin },
       { label: 'GitHub', href: site.links.github },
     ],
@@ -21,7 +23,7 @@ const index: { heading: string; color: 'yellow' | 'cyan' | 'violet' | 'green'; i
   {
     heading: 'Projects',
     color: 'violet',
-    items: projects.map((p) => ({ label: p.short ?? p.name, href: p.external ?? `/work/${p.slug}/` })),
+    items: projects.map((project) => ({ label: project.indexLabel ?? project.name, href: project.external ?? `/work/${project.slug}/` })),
   },
   {
     heading: 'Learn',
@@ -44,7 +46,7 @@ export default function Home() {
             <h1>{site.name}</h1>
             <p className="tagline">{site.tagline}</p>
             <p className="intro">{site.intro}</p>
-            <p className="ask">{site.looking}</p>
+            <p className="ask">{site.lookingFor}</p>
             <div className="actions">
               <Link className="btn btn-fill" href="/#index">
                 Bird’s-eye view
@@ -59,55 +61,36 @@ export default function Home() {
 
         <section className="numbers" aria-label="Results">
           <dl>
-            {numbers.map((n) => (
+            {stats.map((n) => (
               <div key={n.label}>
                 <dt>{n.figure}</dt>
                 <dd>{n.label}</dd>
               </div>
             ))}
           </dl>
-          <p className="muted small">Lowe’s pro sales 2022–2025; Angi 2018–2019.</p>
+          <p className="muted small">{statsNote}</p>
         </section>
-
 
         <section id="experience" className="section" aria-labelledby="experience-title">
           <TraceRule color="cyan" />
           <h2 id="experience-title">Experience</h2>
-          <ol className="list">
-            {experience.map((r) => (
-              <li key={r.title + r.years}>
-                <span className="years">{r.years}</span>
-                <div>
-                  <h3>
-                    {r.title} <span className="org">· {r.org}</span>
-                  </h3>
-                  <p>{r.line}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
+          <RoleList roles={experience} />
         </section>
 
         <section id="projects" className="section" aria-labelledby="projects-title">
           <TraceRule color="violet" />
           <h2 id="projects-title">Projects</h2>
           <ol className="list">
-            {projects.map((p) => (
-              <li key={p.slug}>
-                <span className="years">{p.year}</span>
+            {projects.map((project) => (
+              <li key={project.slug}>
+                <span className="years">{project.year}</span>
                 <div>
                   <h3>
-                    {p.external ? (
-                      <a href={p.external}>
-                        {p.name} <Trace color="violet" dir="up" />
-                      </a>
-                    ) : (
-                      <Link href={`/work/${p.slug}/`}>
-                        {p.name} <Trace color="violet" />
-                      </Link>
-                    )}
+                    <TraceLink href={project.external ?? `/work/${project.slug}/`} color="violet">
+                      {project.name}
+                    </TraceLink>
                   </h3>
-                  <p>{p.line}</p>
+                  <p>{project.line}</p>
                 </div>
               </li>
             ))}
@@ -116,26 +99,14 @@ export default function Home() {
         <section id="education" className="section" aria-labelledby="education-title">
           <TraceRule color="cyan" />
           <h2 id="education-title">Education</h2>
-          <ol className="list">
-            {education.map((r) => (
-              <li key={r.title}>
-                <span className="years">{r.years}</span>
-                <div>
-                  <h3>
-                    {r.title} <span className="org">· {r.org}</span>
-                  </h3>
-                  <p>{r.line}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
+          <RoleList roles={education} />
         </section>
 
         <section id="about" className="section" aria-labelledby="about-title">
           <TraceRule color="yellow" />
           <h2 id="about-title">About</h2>
-          {about.map((p) => (
-            <p key={p}>{p}</p>
+          {about.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
           ))}
         </section>
 
@@ -149,9 +120,9 @@ export default function Home() {
                 <div>
                   <h3>
                     {h.href ? (
-                      <a href={h.href}>
-                        {h.name} <Trace color="green" dir="up" />
-                      </a>
+                      <TraceLink href={h.href} color="green">
+                        {h.name}
+                      </TraceLink>
                     ) : (
                       h.name
                     )}
@@ -166,21 +137,15 @@ export default function Home() {
         <section id="index" className="section explore" aria-labelledby="index-title">
           <h2 id="index-title">Bird’s-eye view</h2>
           <div className="explore-grid">
-            {index.map((g) => (
-              <div key={g.heading}>
-                <h3>{g.heading}</h3>
+            {birdsEyeGroups.map((group) => (
+              <div key={group.heading}>
+                <h3>{group.heading}</h3>
                 <ul>
-                  {g.items.map((it) => (
-                    <li key={it.label}>
-                      {it.href.startsWith('/') ? (
-                        <Link href={it.href} {...(it.download ? { download: site.resumeFilename } : {})}>
-                          <span>{it.label}</span> <Trace color={g.color} dir={it.download ? 'down' : 'right'} />
-                        </Link>
-                      ) : (
-                        <a href={it.href}>
-                          <span>{it.label}</span> <Trace color={g.color} dir="up" />
-                        </a>
-                      )}
+                  {group.items.map((item) => (
+                    <li key={item.label}>
+                      <TraceLink href={item.href} color={group.color} download={item.download}>
+                        <span>{item.label}</span>
+                      </TraceLink>
                     </li>
                   ))}
                 </ul>

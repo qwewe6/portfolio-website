@@ -17,10 +17,10 @@ Every word and number on the site is in **one file**: `src/data/site.ts`.
 | In `site.ts` | What it controls |
 | --- | --- |
 | `site` | Name, eyebrow line, tagline, intro, email, résumé path, links, photo |
-| `numbers` | The four figures under the hero |
+| `stats` | The figures under the hero |
 | `experience`, `education` | The Experience section, one line per role |
 | `hobbies` | The Hobbies section |
-| `projects` | The Projects list. Entries with `external` link out; the rest get a page at `/work/<slug>/` with `summary`, `facts`, `body`, `wins`, `after`, `tech`, `images`, `link` |
+| `projects` | The Projects list. Entries with `external` link out; the rest get a page at `/work/<slug>/` with `summary`, `stats`, `story`, `bullets`, `closing`, `tech`, `images`, `link` |
 
 Other files:
 
@@ -38,7 +38,3 @@ Put a square photo at `public/img/max.jpg` and change `photo: null` to `photo: '
 Pushing to `main` runs `.github/workflows/deploy.yml`, which builds the site and publishes it to GitHub Pages (Settings → Pages → Source must be "GitHub Actions", which it is). The workflow sets the base path from the repo name on its own.
 
 With a custom domain: add it under Settings → Pages, create `public/CNAME` containing the domain, and push.
-
-## Housekeeping
-
-`delete/` is a scratch folder (git-ignored) for things to look over before trashing. Trash it whenever.

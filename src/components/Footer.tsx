@@ -1,6 +1,5 @@
-import Trace from './Trace';
+import TraceLink from './TraceLink';
 import { site } from '@/data/site';
-import { asset } from '@/lib/asset';
 
 export default function Footer() {
   return (
@@ -11,29 +10,29 @@ export default function Footer() {
           <a className="footer-email" href={`mailto:${site.email}?subject=Hello%20Max`}>
             {site.email}
           </a>
-          <p className="muted">{site.looking}</p>
-          <p className="muted">Open to on-site, hybrid or remote.</p>
+          <p className="muted">{site.lookingFor}</p>
+          <p className="muted">{site.availability}</p>
         </div>
         <ul className="footer-links">
           <li>
-            <a href={asset(site.resume)} download={site.resumeFilename}>
-              Résumé (PDF) <Trace color="yellow" dir="down" />
-            </a>
+            <TraceLink href={site.resume} color="yellow" download={site.resumeFilename}>
+              Résumé (PDF)
+            </TraceLink>
           </li>
           <li>
-            <a href={site.links.linkedin}>
-              LinkedIn <Trace color="cyan" dir="up" />
-            </a>
+            <TraceLink href={site.links.linkedin} color="cyan">
+              LinkedIn
+            </TraceLink>
           </li>
           <li>
-            <a href={site.links.youtube}>
-              YouTube <Trace color="violet" dir="up" />
-            </a>
+            <TraceLink href={site.links.youtube} color="violet">
+              YouTube
+            </TraceLink>
           </li>
           <li>
-            <a href={site.links.github}>
-              GitHub <Trace color="green" dir="up" />
-            </a>
+            <TraceLink href={site.links.github} color="green">
+              GitHub
+            </TraceLink>
           </li>
         </ul>
       </div>

@@ -1,8 +1,8 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { site } from '@/data/site';
+import { withBasePath } from '@/lib/withBasePath';
 
-const base = process.env.NEXT_PUBLIC_BASE_PATH || '';
 // Set NEXT_PUBLIC_SITE_URL at build time (the deploy workflow does) so link previews get absolute image URLs.
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://qwewe6.github.io';
 
@@ -10,15 +10,15 @@ const description = `${site.name}, ${site.location}. ${site.tagline} ${site.intr
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: { default: `${site.name}: software sales`, template: `%s | ${site.name}` },
+  title: { default: `${site.name}: ${site.role}`, template: `%s | ${site.name}` },
   description,
-  icons: { icon: `${base}/favicon.svg` },
+  icons: { icon: withBasePath('/favicon.svg') },
   openGraph: {
     type: 'website',
     siteName: site.name,
-    title: `${site.name}: software sales`,
+    title: `${site.name}: ${site.role}`,
     description,
-    images: [{ url: `${base}/img/rcx/hero-roots.jpg`, alt: 'Six colored lines traced over tree roots' }],
+    images: [{ url: withBasePath('/img/rcx/hero-roots.jpg'), alt: 'Six colored lines traced over tree roots' }],
   },
   twitter: { card: 'summary_large_image' },
 };

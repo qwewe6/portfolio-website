@@ -7,3 +7,7 @@ next-env.d.ts
 
 # scratch folder for things to review before trashing
 delete/
+
+# refactor regression baseline
+out-baseline/
+check.sh

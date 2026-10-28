@@ -4,29 +4,29 @@ import { notFound } from 'next/navigation';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import Trace from '@/components/Trace';
-import { projects, getProject } from '@/data/site';
-import { asset } from '@/lib/asset';
+import { projects } from '@/data/site';
+import { withBasePath } from '@/lib/withBasePath';
 
 export const dynamicParams = false;
 
-const pages = projects.filter((p) => !p.external);
+const internalProjects = projects.filter((p) => !p.external);
 
 export function generateStaticParams() {
-  return pages.map((p) => ({ slug: p.slug }));
+  return internalProjects.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const p = getProject(slug);
+  const p = internalProjects.find((x) => x.slug === slug);
   return p ? { title: p.name, description: p.line } : {};
 }
 
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const p = getProject(slug);
-  if (!p || p.external) notFound();
-  const i = pages.findIndex((x) => x.slug === p.slug);
-  const next = pages[(i + 1) % pages.length];
+  const i = internalProjects.findIndex((x) => x.slug === slug);
+  if (i === -1) notFound();
+  const p = internalProjects[i];
+  const next = internalProjects[(i + 1) % internalProjects.length];
 
   return (
     <>
@@ -40,9 +40,9 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         <p className="tagline">{p.line}</p>
         <p className="intro">{p.summary}</p>
 
-        {p.facts && (
+        {p.stats && (
           <dl className="facts">
-            {p.facts.map((f) => (
+            {p.stats.map((f) => (
               <div key={f.label}>
                 <dt>{f.figure}</dt>
                 <dd>{f.label}</dd>
@@ -52,21 +52,21 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         )}
 
         <div className="case-body">
-          {p.body?.map((b) => (
-            <p key={b}>{b}</p>
+          {p.story?.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
           ))}
-          {p.wins && (
+          {p.bullets && (
             <>
-              <h2 className="h2-small">{p.wins.heading}</h2>
+              <h2 className="h2-small">{p.bullets.heading}</h2>
               <ul className="wins">
-                {p.wins.items.map((w) => (
+                {p.bullets.items.map((w) => (
                   <li key={w}>{w}</li>
                 ))}
               </ul>
             </>
           )}
-          {p.after?.map((b) => (
-            <p key={b}>{b}</p>
+          {p.closing?.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
           ))}
           {p.tech && (
             <p className="tech">
@@ -75,7 +75,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           )}
           {p.link && (
             <a className="btn btn-text" href={p.link.href}>
-              {p.link.label} <Trace color="ink" dir="up" />
+              {p.link.label} <Trace color="ink" kind="external" />
             </a>
           )}
         </div>
@@ -84,7 +84,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           <div className="figs">
             {p.images.map((img) => (
               <figure key={img.src}>
-                <img src={asset(img.src)} alt={img.alt} loading="lazy" />
+                <img src={withBasePath(img.src)} alt={img.alt} loading="lazy" />
                 {img.caption && <figcaption>{img.caption}</figcaption>}
               </figure>
             ))}
