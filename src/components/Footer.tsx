@@ -11,7 +11,7 @@ export default function Footer() {
             {site.email}
           </a>
           <p className="muted">{site.lookingFor}</p>
-          <p className="muted">Open to on-site, hybrid or remote.</p>
+          <p className="muted">{site.availability}</p>
         </div>
         <ul className="footer-links">
           <li>

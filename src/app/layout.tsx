@@ -10,13 +10,13 @@ const description = `${site.name}, ${site.location}. ${site.tagline} ${site.intr
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: { default: `${site.name}: software sales`, template: `%s | ${site.name}` },
+  title: { default: `${site.name}: ${site.role}`, template: `%s | ${site.name}` },
   description,
   icons: { icon: withBasePath('/favicon.svg') },
   openGraph: {
     type: 'website',
     siteName: site.name,
-    title: `${site.name}: software sales`,
+    title: `${site.name}: ${site.role}`,
     description,
     images: [{ url: withBasePath('/img/rcx/hero-roots.jpg'), alt: 'Six colored lines traced over tree roots' }],
   },

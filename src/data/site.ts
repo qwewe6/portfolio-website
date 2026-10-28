@@ -3,12 +3,14 @@
 export const site = {
   name: 'Max Becker',
   fullName: 'Maxwell R. Becker',
+  role: 'software sales', // the browser tab reads "<name>: <role>"
   eyebrow: 'Software sales · Denver, Colorado',
   tagline: 'Sales professional with a builder’s toolkit.',
   intro:
     'Need to sell physical or digital products? I’ve got you, from lead generation to close and all the analytics in between. Seven years selling at Lowe’s and Angi; building software and running the numbers on the side.',
   // One line on what you're after. Shown under the intro and in the footer.
   lookingFor: 'Looking for an account executive or solutions role at a software company. Denver or remote.',
+  availability: 'Open to on-site, hybrid or remote.', // footer, under lookingFor
   email: 'maxbecker1023@gmail.com',
   location: 'Denver, Colorado',
   resume: '/Max-Becker-Resume.pdf',
@@ -33,6 +35,8 @@ export const stats: Stat[] = [
   { figure: '11', label: 'Accounts signed at trade shows, $500–750K in year one' },
   { figure: '150–250', label: 'Cold calls a day, full cycle to close, at Angi' },
 ];
+// Caption under the stats row.
+export const statsNote = 'Lowe’s pro sales 2022–2025; Angi 2018–2019.';
 
 export type Role = { years: string; title: string; org: string; line: string };
 

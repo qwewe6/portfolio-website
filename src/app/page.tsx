@@ -5,7 +5,7 @@ import Photo from '@/components/Photo';
 import RoleList from '@/components/RoleList';
 import { TraceRule, type TraceColor } from '@/components/Trace';
 import TraceLink from '@/components/TraceLink';
-import { site, stats, experience, education, projects, hobbies, about } from '@/data/site';
+import { site, stats, statsNote, experience, education, projects, hobbies, about } from '@/data/site';
 
 // The bird's-eye index at the bottom of the page: every place on the site, in three columns.
 const birdsEyeGroups: { heading: string; color: TraceColor; items: { label: string; href: string; download?: string }[] }[] = [
@@ -68,7 +68,7 @@ export default function Home() {
               </div>
             ))}
           </dl>
-          <p className="muted small">Lowe’s pro sales 2022–2025; Angi 2018–2019.</p>
+          <p className="muted small">{statsNote}</p>
         </section>
 
         <section id="experience" className="section" aria-labelledby="experience-title">
